@@ -432,7 +432,12 @@ SELECT
     IFNULL(pv_orleans.chiffre_aff, 0) AS ca_orleans,   
     IFNULL(pv_poitiers.chiffre_aff, 0) AS ca_poitiers,
     IFNULL(pv_vendome.chiffre_aff, 0) AS ca_vendome,
-    SUM(IFNULL(cles.ca_annuel_pv, 0)) OVER(PARTITION BY cles.annee) AS ca_annuel_pv
+    IFNULL(pv_tours.chiffre_aff, 0) +
+    IFNULL(pv_angers.chiffre_aff, 0) +
+    IFNULL(pv_orleans.chiffre_aff, 0) +
+    IFNULL(pv_poitiers.chiffre_aff, 0) +
+    IFNULL(pv_vendome.chiffre_aff, 0)
+    AS ca_annuel
 FROM ca_mensuel_pvente AS cles
 LEFT JOIN ca_mensuel_pvente AS pv_tours ON cles.annee = pv_tours.annee
                                         AND cles.mois = pv_tours.mois
@@ -448,5 +453,6 @@ LEFT JOIN ca_mensuel_pvente AS pv_poitiers ON cles.annee = pv_poitiers.annee
                                         AND pv_poitiers.id_p_vente = 4
 LEFT JOIN ca_mensuel_pvente AS pv_vendome ON cles.annee = pv_vendome.annee
                                         AND cles.mois = pv_vendome.mois
-                                        AND pv_vendome.id_p_vente = 5;
+                                        AND pv_vendome.id_p_vente = 5
+GROUP BY annee, mois;
 
