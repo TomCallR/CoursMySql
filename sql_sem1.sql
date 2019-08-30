@@ -361,6 +361,7 @@ SELECT * FROM personne;
 -- Test téléchargement d'une table
 -- Ne marche pas dans un autre répertoire, ou il faut modifier le fichier de config
 -- pour fixer la valeur de SECURE_FILE_PRIV
+-- https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_secure_file_priv
 SHOW VARIABLES LIKE 'secure_file_priv';
 SELECT *
 FROM personne
@@ -387,11 +388,65 @@ ALTER TABLE vente ADD CONSTRAINT fk_vente_id_p_vente
 SELECT
     YEAR(date_vente) as annee,
     MONTH(date_vente) as mois,
-    id_p_vente as p_vente,
-    SUM(prix_vente) as ca
+    CONCAT(id_p_vente, ' ', label) as point_vente,
+    FORMAT(SUM(prix_vente), 0, 'fr-FR') as chiffre_aff
 FROM
     vente
+    INNER JOIN p_vente ON p_vente.id = vente.id_p_vente
 GROUP BY
-    p_vente, annee, mois
+    point_vente, annee, mois
 ORDER BY
-    annee, mois;
+    annee, mois, id_p_vente;
+
+/* Même chose avec en plus le CA annuel */
+CREATE VIEW ca_mensuel_pvente AS
+SELECT
+    ssreq.*,
+    SUM(chiffre_aff) 
+        OVER (PARTITION BY annee, id_p_vente) 
+        AS ca_annuel_pv
+FROM
+    (
+        SELECT
+            YEAR(date_vente) AS annee,
+            MONTH(date_vente) AS mois,
+            id_p_vente AS id_p_vente,
+            SUM(prix_vente) AS chiffre_aff
+        FROM
+            vente
+            INNER JOIN p_vente ON p_vente.id = vente.id_p_vente
+        GROUP BY
+            id_p_vente, annee, mois
+        ORDER BY
+            annee, mois, id_p_vente
+    ) AS ssreq;
+
+/* Même chose mais avec une colonne par agence */
+SELECT * FROM ca_mensuel_pvente;
+
+SELECT
+    cles.annee,
+    cles.mois,
+    IFNULL(pv_tours.chiffre_aff, 0) AS ca_tours,
+    IFNULL(pv_angers.chiffre_aff, 0) AS ca_angers, 
+    IFNULL(pv_orleans.chiffre_aff, 0) AS ca_orleans,   
+    IFNULL(pv_poitiers.chiffre_aff, 0) AS ca_poitiers,
+    IFNULL(pv_vendome.chiffre_aff, 0) AS ca_vendome,
+    SUM(IFNULL(cles.ca_annuel_pv, 0)) OVER(PARTITION BY cles.annee) AS ca_annuel_pv
+FROM ca_mensuel_pvente AS cles
+LEFT JOIN ca_mensuel_pvente AS pv_tours ON cles.annee = pv_tours.annee
+                                        AND cles.mois = pv_tours.mois
+                                        AND pv_tours.id_p_vente = 1
+LEFT JOIN ca_mensuel_pvente AS pv_angers ON cles.annee = pv_angers.annee
+                                        AND cles.mois = pv_angers.mois
+                                        AND pv_angers.id_p_vente = 2
+LEFT JOIN ca_mensuel_pvente AS pv_orleans ON cles.annee = pv_orleans.annee
+                                        AND cles.mois = pv_orleans.mois
+                                        AND pv_orleans.id_p_vente = 3
+LEFT JOIN ca_mensuel_pvente AS pv_poitiers ON cles.annee = pv_poitiers.annee
+                                        AND cles.mois = pv_poitiers.mois
+                                        AND pv_poitiers.id_p_vente = 4
+LEFT JOIN ca_mensuel_pvente AS pv_vendome ON cles.annee = pv_vendome.annee
+                                        AND cles.mois = pv_vendome.mois
+                                        AND pv_vendome.id_p_vente = 5;
+
