@@ -249,26 +249,22 @@ SELECT
     (SELECT cheveux.id FROM cheveux ORDER BY RAND() LIMIT 1),
     CAST(x.taille AS DECIMAL(6,0)),
     ROUND(CAST(x.poids AS DECIMAL(6,1)), 0)
-FROM TEMP_USER AS x
-ON DUPLICATE KEY UPDATE x.pseudo = CONCAT(x.pseudo, SUBSTR(pseudo, 2, 1));
+FROM TEMP_USER AS x;
 
-update temp_user set pseudo = CONCAT(pseudo, '2') where  id=168;
-update temp_user set pseudo = CONCAT(pseudo, '2') where  id=385;
-update temp_user set pseudo = CONCAT(pseudo, '2') where  id=425;
-update temp_user set pseudo = CONCAT(pseudo, '2') where  id=743;
-select * from temp_user where pseudo like 'Swith%';
+SELECT * FROM user;
 
-ALTER TABLE TEMP_USER ADD nb TINYINT AFTER pseudo;
-
+-- corriger les doublons de pseudo
+/* drop table doublons_pseudo;
 create table doublons_pseudo as select pseudo, count(*) as nb
-from temp_user group by pseudo
-having nb>1;
+from temp_user group by pseudo;
+select * from doublons_pseudo where nb>1;
 
-UPDATE TEMP_USER SET nb = (Select count(x.pseudo) as nb
-from temp_user AS x where x.pseudo = temp_user.pseudo
+UPDATE TEMP_USER SET nb = (Select nb
+from doublons_pseudo where doublons_pseudo.pseudo = temp_user.pseudo
 limit 1);
 
-Update Temp_user set pseudo = CONCAT(pseudo, ROUND(RAND()*9, 0)
-WHERE pseudo = (select pseudo from (Select pseudo, count(*) as nb
-from temp_user group by pseudo
-having nb>1));
+Update Temp_user set pseudo = CONCAT(pseudo, SUBSTR(pseudo, FLOOR(RAND()*4+1), 1))
+WHERE nb > 1;
+
+select pseudo, count(*) as nb2
+from temp_user group by pseudo having nb2 > 1; */
