@@ -1,0 +1,24 @@
+{
+    "sqltools.connections": [
+        {
+            "connectionTimeout": 30,
+            "database": "cefim",
+            "dialect": "MySQL",
+            "name": "cefim",
+            "password": "root",
+            "port": 3306,
+            "server": "localhost",
+            "username": "root"
+        },
+        {
+            "connectionTimeout": 30,
+            "database": "rencontre",
+            "dialect": "MySQL",
+            "name": "rencontres",
+            "password": "root",
+            "port": 3306,
+            "server": "127.0.0.1",
+            "username": "root"
+        }
+    ]
+}

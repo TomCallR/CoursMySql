@@ -455,3 +455,80 @@ LEFT JOIN ( SELECT annee, SUM(ca_annuel_pv) AS ca_annuel
             ) AS tot_annuels ON cles.annee = tot_annuels.annee
 GROUP BY annee, mois;
 
+-- test dump cefim
+-- mysqldump -h localhost -u root -p cefim > cefim.sql
+drop database cefim2;
+create database cefim2;
+mysql cefim2 < cefim.sql
+
+-- test sur la recherche FULLTEXT
+CREATE TABLE Livre (
+	id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+	auteur VARCHAR(50),
+	titre VARCHAR(200)
+) ENGINE = InnoDB;
+
+INSERT INTO Livre (auteur, titre)
+VALUES ('Daniel Pennac', 'Au bonheur des ogres'),
+('Daniel Pennac', 'La Fée Carabine'),
+('Daniel Pennac', 'Comme un roman'),
+('Daniel Pennac', 'La Petite marchande de prose'),
+('Jacqueline Harpman', 'Le Bonheur est dans le crime'),
+('Jacqueline Harpman', 'La Dormition des amants'),
+('Jacqueline Harpman', 'La Plage d''Ostende'),
+('Jacqueline Harpman', 'Histoire de Jenny'),
+('Terry Pratchett', 'Les Petits Dieux'),
+('Terry Pratchett', 'Le Cinquième éléphant'),
+('Terry Pratchett', 'La Vérité'),
+('Terry Pratchett', 'Le Dernier héros'),
+('Terry Goodkind', 'Le Temple des vents'),
+('Jules Verne', 'De la Terre à la Lune'),
+('Jules Verne', 'Voyage au centre de la Terre'),
+('Henri-Pierre Roché', 'Jules et Jim');
+
+CREATE FULLTEXT INDEX ind_full_titre
+ON Livre (titre);
+
+CREATE FULLTEXT INDEX ind_full_aut
+ON Livre (auteur);
+
+CREATE FULLTEXT INDEX ind_full_titre_aut
+ON Livre (titre, auteur);
+
+SELECT *,
+MATCH(auteur) AGAINST ('Terry')
+FROM Livre
+WHERE MATCH(auteur)
+AGAINST ('Terry');
+
+SELECT *,
+MATCH(auteur) AGAINST ('Terry éléphant')
+FROM Livre
+WHERE MATCH(auteur)
+AGAINST ('Terry');
+
+SELECT *,
+MATCH(auteur, titre) AGAINST ('Terry éléphant')
+FROM Livre
+WHERE MATCH(auteur)
+AGAINST ('Terry');
+
+SELECT *,
+MATCH(auteur, titre) AGAINST ('Terr*' IN BOOLEAN MODE) AS SCORE
+FROM Livre
+WHERE MATCH(auteur, titre)
+AGAINST ('Terr* -Pratchett +Lune' IN BOOLEAN MODE);
+
+SELECT * FROM INFORMATION_SCHEMA.INNODB_FT_DEFAULT_STOPWORD;
+
+-- Fonctions SQL
+DROP FUNCTION IF EXISTS age;
+CREATE FUNCTION age(date_ DATE) RETURNS INT READS SQL DATA
+    RETURN TIMESTAMPDIFF(YEAR, date_, CURRENT_DATE());
+
+SELECT *, age(ddn) FROM client LIMIT 50;
+
+
+
+
+
