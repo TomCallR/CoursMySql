@@ -268,3 +268,161 @@ WHERE nb > 1;
 
 select pseudo, count(*) as nb2
 from temp_user group by pseudo having nb2 > 1; */
+
+-- Replir la table des intérêts par user
+CREATE TABLE ztemp_int (id INT UNSIGNED NOT NULL,
+id_interet SMALLINT UNSIGNED NOT NULL);
+
+INSERT INTO ztemp_int VALUES    
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
+    ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1));
+
+INSERT INTO ztemp_int(id, id_interet) SELECT user.id, (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1) FROM user;
+
+SELECT count(*) FROM ztemp_int;
+
+INSERT INTO user_interet(id_user, id_interet) SELECT DISTINCT id, id_interet FROM ztemp_int ORDER BY id;
+
+SELECT count(*) FROM user_interet;
+SELECT * FROM user_interet;
+
+-- match des individus
+-- E1 ajout du champ texte pour lister les interets
+ALTER TABLE user ADD interet VARCHAR(1000) NOT NULL DEFAULT '';
+CREATE FULLTEXT INDEX ind_full_interet
+ON user (interet);
+
+-- E2 procédure qui nettoie et remplit la colonne
+DROP PROCEDURE IF EXISTS fill_interet_full_text;
+CREATE PROCEDURE fill_interet_full_text(start_id INT UNSIGNED, end_id INT UNSIGNED)
+    BEGIN
+        UPDATE user AS z
+        SET z.interet = (
+            SELECT GROUP_CONCAT(y.libelle)
+            FROM
+                (SELECT DISTINCT id_user, libelle
+                FROM user_interet
+                INNER JOIN interet
+                ON user_interet.id_interet = interet.id
+                ORDER BY id_user, libelle) AS y
+            WHERE y.id_user = z.id
+            )
+        WHERE z.id >= start_id AND z.id <= end_id;
+    END;
+
+-- E3 fill table user column interet
+-- UPDATE user SET interet = '';
+CALL fill_interet_full_text(0, 1000000);
+SELECT id, interet FROM user;
+
+-- E4 triggers when deleting or adding an interest on a user
+DROP TRIGGER IF EXISTS trg_user_interet_del;
+CREATE TRIGGER trg_user_interet_del
+    AFTER DELETE ON user_interet
+    FOR EACH ROW
+    BEGIN
+        CALL fill_interet_full_text(OLD.id_user, OLD.id_user);
+    END;
+
+DROP TRIGGER IF EXISTS trg_user_interet_ins;
+CREATE TRIGGER trg_user_interet_ins
+    AFTER INSERT ON user_interet
+    FOR EACH ROW
+    BEGIN
+        CALL fill_interet_full_text(NEW.id_user, NEW.id_user);
+    END;
+
+-- E5 test
+INSERT INTO user_interet VALUES(NULL, 3486, 5);
+SELECT id, interet FROM user WHERE id = 3486;
+INSERT INTO user_interet VALUES(NULL, 3487, 5);
+INSERT INTO user_interet VALUES(NULL, 3487, 9);
+DELETE FROM user_interet WHERE id_user = 3487 AND id_interet = 7;
+SELECT id, interet FROM user WHERE id = 3487;
+
+-- Créer table des likes
+-- E1 création
+DROP TABLE IF EXISTS user_like;
+CREATE TABLE user_like (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id_user INT UNSIGNED NOT NULL,
+    id_liked_user INT UNSIGNED NOT NULL,
+    CONSTRAINT fk_user_like_id_user
+        FOREIGN KEY (id_user) REFERENCES user(id),
+    CONSTRAINT fk_user_like_id_liked_user
+        FOREIGN KEY (id_liked_user) REFERENCES user(id)
+);
+
+-- E2 remplir
+DROP TABLE IF EXISTS zuser_like;
+CREATE TABLE zuser_like AS
+    SELECT id_user, id_liked_user
+    FROM user_like
+    LIMIT 0;
+
+INSERT INTO zuser_like(id_user, id_liked_user)
+    SELECT a.id, b.id FROM user AS a, user AS b
+    ORDER BY RAND()
+    LIMIT 3000;
+
+DELETE FROM zuser_like WHERE id_user = id_liked_user;
+
+INSERT INTO user_like(id_user, id_liked_user)
+    SELECT DISTINCT * FROM zuser_like
+    ORDER BY id_user;
+
+SELECT * FROM user_like;
