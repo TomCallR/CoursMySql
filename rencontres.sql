@@ -181,8 +181,8 @@ LEFT JOIN (SELECT id_user, interet.libelle FROM user_interet
 SELECT * FROM v_user;
 
 -- Gender,GivenName,City,ZipCode,EmailAddress,Username,Birthday,Kilograms,Centimeters,Latitude,Longitude
-DROP TABLE TEMP_USER;
-CREATE TABLE TEMP_USER(
+DROP TABLE zuser;
+CREATE TABLE zuser(
     sexe VARCHAR(10),
     prenom VARCHAR(70),
     ville VARCHAR(70),
@@ -199,18 +199,19 @@ CREATE TABLE TEMP_USER(
 SET GLOBAL local_infile = 'ON';
 
 LOAD DATA LOCAL INFILE 'D:/Git/CoursMySql/rencontre_data.csv'
-INTO TABLE TEMP_USER
+INTO TABLE zuser
 FIELDS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY '"'
 LINES TERMINATED BY '\n' 
 IGNORE 1 LINES;
 
-ALTER TABLE TEMP_USER ADD id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT  PRIMARY KEY FIRST;
+ALTER TABLE zuser ADD id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT  PRIMARY KEY FIRST;
 
-UPDATE TEMP_USER SET ville = REPLACE(ville, '"', '');
+-- UPDATE zuser SET ville = REPLACE(ville, '"', '');
 
 INSERT INTO ville(code_postal, nom) SELECT
     code_postal, ville
-    FROM TEMP_USER
+    FROM zuser
     GROUP BY ville
     ORDER BY ville;
 
@@ -249,25 +250,25 @@ SELECT
     (SELECT cheveux.id FROM cheveux ORDER BY RAND() LIMIT 1),
     CAST(x.taille AS DECIMAL(6,0)),
     ROUND(CAST(x.poids AS DECIMAL(6,1)), 0)
-FROM TEMP_USER AS x;
+FROM zuser AS x;
 
 SELECT * FROM user;
 
 -- corriger les doublons de pseudo
 /* drop table doublons_pseudo;
 create table doublons_pseudo as select pseudo, count(*) as nb
-from temp_user group by pseudo;
+from zuser group by pseudo;
 select * from doublons_pseudo where nb>1;
 
-UPDATE TEMP_USER SET nb = (Select nb
-from doublons_pseudo where doublons_pseudo.pseudo = temp_user.pseudo
+UPDATE zuser SET nb = (Select nb
+from doublons_pseudo where doublons_pseudo.pseudo = zuser.pseudo
 limit 1);
 
-Update Temp_user set pseudo = CONCAT(pseudo, SUBSTR(pseudo, FLOOR(RAND()*4+1), 1))
+Update zuser set pseudo = CONCAT(pseudo, SUBSTR(pseudo, FLOOR(RAND()*4+1), 1))
 WHERE nb > 1;
 
 select pseudo, count(*) as nb2
-from temp_user group by pseudo having nb2 > 1; */
+from zuser group by pseudo having nb2 > 1; */
 
 -- Replir la table des intérêts par user
 CREATE TABLE ztemp_int (id INT UNSIGNED NOT NULL,
@@ -410,19 +411,65 @@ CREATE TABLE user_like (
 -- E2 remplir
 DROP TABLE IF EXISTS zuser_like;
 CREATE TABLE zuser_like AS
-    SELECT id_user, id_liked_user
+    SELECT
+        id_user, sexe, cherche,
+        id_liked_user, sexe AS liked_sexe, cherche AS liked_cherche
     FROM user_like
+    INNER JOIN user ON user_like.id_user = user.id
     LIMIT 0;
 
-INSERT INTO zuser_like(id_user, id_liked_user)
-    SELECT a.id, b.id FROM user AS a, user AS b
+INSERT INTO zuser_like(id_user, sexe, cherche,
+    id_liked_user, liked_sexe, liked_cherche)
+    SELECT
+        a.id, a.sexe, a.cherche,
+        b.id, b.sexe, b.cherche
+        FROM user AS a, user AS b
     ORDER BY RAND()
-    LIMIT 3000;
+    LIMIT 100000;
 
 DELETE FROM zuser_like WHERE id_user = id_liked_user;
+DELETE FROM zuser_like WHERE cherche != 'X'
+    AND cherche != liked_sexe;
+DELETE FROM zuser_like WHERE liked_cherche != 'X'
+    AND liked_cherche != sexe;
 
+DELETE FROM user_like;
 INSERT INTO user_like(id_user, id_liked_user)
-    SELECT DISTINCT * FROM zuser_like
+    SELECT DISTINCT id_user, id_liked_user FROM zuser_like
     ORDER BY id_user;
 
 SELECT * FROM user_like;
+
+-- Créer table des couples
+-- E1 création de la structure
+DROP TABLE IF EXISTS couple;
+CREATE TABLE couple (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id_user1 INT UNSIGNED NOT NULL, -- id_user1 < id_user2
+    id_user2 INT UNSIGNED NOT NULL,
+    CONSTRAINT fk_couple_id_user1
+        FOREIGN KEY (id_user1) REFERENCES user(id),
+    CONSTRAINT fk_couple_id_user2
+        FOREIGN KEY (id_user2) REFERENCES user(id)
+);
+
+-- E2 remplissage
+DROP PROCEDURE IF EXISTS fill_couple;
+CREATE PROCEDURE fill_couple()
+    BEGIN
+    INSERT INTO couple(id_user1, id_user2)
+    SELECT a.id_user, a.id_liked_user
+    FROM user_like AS a
+    INNER JOIN user_like AS b
+        ON a.id_user = b.id_liked_user
+        AND a.id_liked_user = b.id_user
+    INNER JOIN user AS aa
+        ON aa.id = a.id_user
+    INNER JOIN user AS bb
+        ON bb.id = a.id_liked_user        
+    WHERE b.id IS NOT NULL
+    AND a.id_user < a.id_liked_user;
+    END;
+
+CALL fill_couple();
+SELECT * FROM couple;
