@@ -46,7 +46,7 @@ CREATE TABLE user(
     id_cheveux TINYINT UNSIGNED,
     taille TINYINT UNSIGNED,
     poids TINYINT UNSIGNED,
-    UNIQUE INDEX ind_pseudo (pseudo),
+    -- UNIQUE INDEX ind_pseudo (pseudo),
     CONSTRAINT fk_user_id_ville
         FOREIGN KEY (id_ville) REFERENCES ville(id),
     CONSTRAINT fk_user_id_yeux
