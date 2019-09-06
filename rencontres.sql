@@ -156,12 +156,13 @@ INSERT INTO user_interet(id_user, id_interet) VALUES
     ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)),
     ((SELECT id FROM user ORDER BY RAND() LIMIT 1), (SELECT id FROM interet WHERE libelle <> 'N/A' ORDER BY RAND() LIMIT 1)); */
 
+DROP VIEW IF EXISTS v_user;
 CREATE VIEW v_user AS SELECT
     user.id,
     user.nom AS nom,
     user.prenom,
     user.pseudo,
-    user.date_naiss,
+    DATE_FORMAT(user.date_naiss, '%d-%m-%Y') AS date_naiss,
     user.sexe,
     user.cherche,
     ville.nom AS ville,        
