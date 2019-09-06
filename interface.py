@@ -1,29 +1,39 @@
 import mysql.connector as mcon
 from mysql.connector import Error
 
-def connect_to_db(phost: str, puser: str, ppass: str, pport: str, pdb: str) -> mcon.MySQLConnection:
+db_config = {
+    "host": "localhost",
+    "user": "root",
+    "password": "root",
+    "port": "3306",
+    "database": "rencontre"
+}
+
+#
+def connect_to_db():
     success: bool = False
     message: str = ''
     db: mcon.MySQLConnection = None
     try:
-        db = mcon.connect(
-            host = phost,
-            user = puser,
-            password = ppass,
-            port = pport,
-            database = pdb
-        )
+        db = mcon.connect(**db_config)
         success = True
     except Error as err:
         message = 'Erreur de connection : ' + str(err.msg)
     return success, message, db
 
+#
+def close_connexion(pdb: mcon.MySQLConnection):
+    pdb.close()
+
+#
 def list_choix_interets(pdb: mcon.MySQLConnection):
     cursor = pdb.cursor()
     cursor.execute('SELECT * FROM interet WHERE libelle <> "N/A" ORDER BY id;')
     data = cursor.fetchall()
+    cursor.close()
     return data
 
+#
 def cherche_match(pdb: mcon.MySQLConnection):
     cursor = None
     sexe = ''
@@ -64,16 +74,19 @@ def cherche_match(pdb: mcon.MySQLConnection):
     cursor = pdb.cursor()
     cursor.execute(myquery)
     data = cursor.fetchall()
+    cursor.close()
     disp_str = "{}, pseudo {}, de {}, né(e) le {}, {} cherchant un(e) {}, aimant {}, matchant avec un score de {}"
     for (nom, pseudo, ddn, sexe, ch, ville, interets, score) in data:
         print(disp_str.format(nom, pseudo, ville, ddn, sexe, str.replace(ch, 'X', 'H/F'), interets, score))
 
+#
 if __name__ == "__main__": 
     success: bool = False
     message: str = ''
     mydb: mcon.MySQLConnection = None
-    success, message, mydb = connect_to_db('localhost', 'root', 'root', '3306', 'rencontre')
+    success, message, mydb = connect_to_db()
     if success:
         cherche_match(mydb)
     else:
         print(message)
+    close_connexion(mydb)
