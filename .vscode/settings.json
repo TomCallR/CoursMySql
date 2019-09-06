@@ -20,5 +20,6 @@
             "server": "127.0.0.1",
             "username": "root"
         }
-    ]
+    ],
+    "python.pythonPath": "C:\\Users\\Datanalyst\\AppData\\Local\\Programs\\Python\\Python37\\python.exe"
 }

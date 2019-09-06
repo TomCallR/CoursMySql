@@ -1,0 +1,35 @@
+show tables;
+
+select count(*) from airport;
+
+SELECT count(*),
+    DAY(FL_DATE),
+    MONTH(FL_DATE),
+    AVG(DEP_DELAY),
+    AVG(ARR_DELAY)
+FROM airport
+WHERE MONTH(FL_DATE) = 1
+GROUP BY
+    DAY(FL_DATE),
+    MONTH(FL_DATE);
+
+ALTER TABLE airport
+    ADD mois TINYINT UNSIGNED
+    GENERATED ALWAYS AS (MONTH(FL_DATE)) STORED;
+
+ALTER TABLE airport PARTITION BY LIST( mois ) (
+   PARTITION p1 VALUES IN (1),
+   PARTITION p2 VALUES IN (2),
+   PARTITION p3 VALUES IN (3),
+   PARTITION p4 VALUES IN (4)
+);
+
+SELECT count(*),
+    DAY(FL_DATE),
+    MONTH(FL_DATE),
+    AVG(DEP_DELAY),
+    AVG(ARR_DELAY)
+FROM airport PARTITION (p1)
+GROUP BY
+    DAY(FL_DATE),
+    MONTH(FL_DATE);
